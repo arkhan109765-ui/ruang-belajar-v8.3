@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: ruang-belajar
+    runtime: python
+    region: singapore
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/status
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-3.5-flash-lite
+      - key: GEMINI_TIMEOUT_MS
+        value: "90000"
+      - key: DATA_DIR
+        value: /opt/render/project/src/data

@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Koleksi - Ruang Belajar</title>
+
+    <style>
+        :root {
+            --bg: #f5f7fb;
+            --card: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --button: #111827;
+            --button-text: #ffffff;
+            --secondary: #eef0f3;
+            --accent: #6366f1;
+            --locked: #f3f4f6;
+        }
+
+        body.dark-mode {
+            --bg: #111827;
+            --card: #1f2937;
+            --text: #f9fafb;
+            --muted: #cbd5e1;
+            --border: #374151;
+            --button: #f9fafb;
+            --button-text: #111827;
+            --secondary: #374151;
+            --accent: #818cf8;
+            --locked: #263244;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition:
+                background-color 0.2s ease,
+                color 0.2s ease;
+        }
+
+        .page {
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .title h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .title p {
+            margin: 8px 0 0;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        button {
+            border: 0;
+            border-radius: 12px;
+            padding: 12px 16px;
+            background: var(--button);
+            color: var(--button-text);
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.88;
+        }
+
+        button:disabled {
+            cursor: default;
+            opacity: 0.6;
+        }
+
+        .top-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .secondary-button {
+            background: var(--secondary);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .exp-card {
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: var(--card);
+        }
+
+        .exp-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .exp-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .exp-number {
+            color: var(--muted);
+        }
+
+        .exp-bar {
+            width: 100%;
+            height: 14px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: var(--secondary);
+        }
+
+        .exp-fill {
+            width: 0%;
+            height: 100%;
+            border-radius: 999px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .exp-small {
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .collection-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .collection-card {
+            padding: 22px;
+            border: 2px solid var(--border);
+            border-radius: 18px;
+            background: var(--card);
+            text-align: center;
+            transition:
+                transform 0.2s ease,
+                border-color 0.2s ease;
+        }
+
+        .collection-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .collection-card.active {
+            border-color: var(--accent);
+        }
+
+        .collection-card.locked {
+            background: var(--locked);
+            opacity: 0.72;
+        }
+
+        .skin {
+            font-size: 64px;
+            margin-bottom: 12px;
+        }
+
+        .skin-name {
+            margin-bottom: 8px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .skin-description {
+            min-height: 42px;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .skin-status {
+            margin: 14px 0;
+            min-height: 20px;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .collection-card.active .skin-status {
+            color: var(--accent);
+        }
+
+        .collection-card button {
+            width: 100%;
+        }
+
+        @media (max-width: 750px) {
+
+            .page {
+                padding: 16px;
+            }
+
+            .top {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .top-buttons {
+                flex-direction: column;
+            }
+
+            .top-buttons button {
+                width: 100%;
+            }
+
+            .collection-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            .collection-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .title h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <div class="container">
+
+        <div class="top">
+
+            <div class="title">
+
+                <h1>🎨 Koleksi</h1>
+
+                <p>
+                    Kumpulkan dan pilih karakter yang ingin kamu gunakan.
+                </p>
+
+            </div>
+
+            <div class="top-buttons">
+
+                <button
+                    class="secondary-button"
+                    type="button"
+                    onclick="kembaliKeMenu()"
+                >
+                    ← Menu
+                </button>
+
+                <button
+                    class="secondary-button"
+                    id="themeButton"
+                    type="button"
+                    onclick="ubahTema()"
+                >
+                    🌙 Mode Gelap
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="exp-card">
+
+            <div class="exp-row">
+
+                <div class="exp-title">
+                    ⭐ Level <span id="level">1</span>
+                </div>
+
+                <div class="exp-number">
+                    <span id="exp">0</span> EXP
+                </div>
+
+            </div>
+
+            <div class="exp-bar">
+
+                <div
+                    id="expFill"
+                    class="exp-fill"
+                ></div>
+
+            </div>
+
+            <div
+                id="expText"
+                class="exp-small"
+            >
+                0 / 100 EXP menuju level berikutnya.
+            </div>
+
+        </div>
+
+
+        <div
+            id="collectionGrid"
+            class="collection-grid"
+        ></div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    const SKIN_KEY =
+        "ruangBelajarSkin";
+
+    const OWNED_KEY =
+        "ruangBelajarOwnedSkins";
+
+
+    const skins = [
+
+        {
+            id: "default",
+            nama: "Pelajar",
+            emoji: "🧑",
+            deskripsi: "Karakter awal yang langsung tersedia.",
+            harga: 0
+        },
+
+        {
+            id: "robot",
+            nama: "Robot",
+            emoji: "🤖",
+            deskripsi: "Teman belajar dari masa depan.",
+            harga: 50
+        },
+
+        {
+            id: "wizard",
+            nama: "Penyihir",
+            emoji: "🧙",
+            deskripsi: "Cocok untuk menjelajah materi.",
+            harga: 100
+        },
+
+        {
+            id: "ninja",
+            nama: "Ninja",
+            emoji: "🥷",
+            deskripsi: "Cepat, fokus, dan siap tantangan.",
+            harga: 150
+        },
+
+        {
+            id: "astronaut",
+            nama: "Astronaut",
+            emoji: "🧑‍🚀",
+            deskripsi: "Belajar sampai luar angkasa.",
+            harga: 200
+        },
+
+        {
+            id: "scientist",
+            nama: "Ilmuwan",
+            emoji: "🧑‍🔬",
+            deskripsi: "Eksperimen konsep sampai paham.",
+            harga: 250
+        }
+
+    ];
+
+
+    function getExp() {
+
+        const value =
+            Number(
+                localStorage.getItem("exp") || 0
+            );
+
+        if (Number.isNaN(value)) {
+            return 0;
+        }
+
+        return Math.max(0, value);
+    }
+
+
+    function getOwnedSkins() {
+
+        let owned = [];
+
+        try {
+
+            owned = JSON.parse(
+                localStorage.getItem(OWNED_KEY)
+                || "[\"default\"]"
+            );
+
+        } catch (error) {
+
+            owned = ["default"];
+
+        }
+
+
+        if (!Array.isArray(owned)) {
+
+            owned = ["default"];
+
+        }
+
+
+        if (!owned.includes("default")) {
+
+            owned.unshift("default");
+
+        }
+
+
+        return owned;
+
+    }
+
+
+    function saveOwnedSkins(owned) {
+
+        localStorage.setItem(
+            OWNED_KEY,
+            JSON.stringify(owned)
+        );
+
+    }
+
+
+    function getSelectedSkin() {
+
+        const selected =
+            localStorage.getItem(
+                SKIN_KEY
+            ) || "default";
+
+        const owned =
+            getOwnedSkins();
+
+        if (!owned.includes(selected)) {
+
+            localStorage.setItem(
+                SKIN_KEY,
+                "default"
+            );
+
+            return "default";
+
+        }
+
+        return selected;
+
+    }
+
+
+    function updateEXP() {
+
+        const exp =
+            getExp();
+
+        const level =
+            Math.floor(exp / 100) + 1;
+
+        const current =
+            exp % 100;
+
+
+        document.getElementById(
+            "exp"
+        ).textContent = exp;
+
+
+        document.getElementById(
+            "level"
+        ).textContent = level;
+
+
+        document.getElementById(
+            "expFill"
+        ).style.width =
+            current + "%";
+
+
+        document.getElementById(
+            "expText"
+        ).textContent =
+            current +
+            " / 100 EXP menuju level " +
+            (level + 1) +
+            ".";
+
+    }
+
+
+    function pilihSkin(id) {
+
+        const owned =
+            getOwnedSkins();
+
+        if (!owned.includes(id)) {
+
+            return;
+
+        }
+
+        localStorage.setItem(
+            SKIN_KEY,
+            id
+        );
+
+        renderKoleksi();
+
+    }
+
+
+    function beliSkin(id) {
+
+        const skin =
+            skins.find(
+                function(item) {
+                    return item.id === id;
+                }
+            );
+
+
+        if (!skin) {
+            return;
+        }
+
+
+        const owned =
+            getOwnedSkins();
+
+
+        if (owned.includes(id)) {
+
+            pilihSkin(id);
+
+            return;
+
+        }
+
+
+        const exp =
+            getExp();
+
+
+        if (exp < skin.harga) {
+
+            alert(
+                "EXP belum cukup.\n\n" +
+                "Harga " +
+                skin.nama +
+                ": " +
+                skin.harga +
+                " EXP\n" +
+                "EXP kamu: " +
+                exp +
+                " EXP"
+            );
+
+            return;
+
+        }
+
+
+        const expBaru =
+            exp - skin.harga;
+
+
+        localStorage.setItem(
+            "exp",
+            String(expBaru)
+        );
+
+
+        owned.push(id);
+
+        saveOwnedSkins(
+            owned
+        );
+
+
+        localStorage.setItem(
+            SKIN_KEY,
+            id
+        );
+
+
+        updateEXP();
+
+        renderKoleksi();
+
+
+        alert(
+            skin.nama +
+            " berhasil dibuka dan dipakai!"
+        );
+
+    }
+
+
+    function renderKoleksi() {
+
+        const grid =
+            document.getElementById(
+                "collectionGrid"
+            );
+
+
+        const owned =
+            getOwnedSkins();
+
+
+        const selected =
+            getSelectedSkin();
+
+
+        let html = "";
+
+
+        skins.forEach(
+            function(skin) {
+
+                const isOwned =
+                    owned.includes(
+                        skin.id
+                    );
+
+
+                const isActive =
+                    selected === skin.id;
+
+
+                let status = "";
+
+                let button = "";
+
+
+                if (isActive) {
+
+                    status =
+                        "✓ Sedang dipakai";
+
+                    button = `
+                        <button
+                            type="button"
+                            disabled
+                        >
+                            Sedang Dipakai
+                        </button>
+                    `;
+
+                } else if (isOwned) {
+
+                    status =
+                        "✓ Sudah dimiliki";
+
+                    button = `
+                        <button
+                            type="button"
+                            onclick="pilihSkin('${skin.id}')"
+                        >
+                            Pakai
+                        </button>
+                    `;
+
+                } else {
+
+                    status =
+                        "🔒 " +
+                        skin.harga +
+                        " EXP";
+
+                    button = `
+                        <button
+                            type="button"
+                            onclick="beliSkin('${skin.id}')"
+                        >
+                            Buka dengan ${skin.harga} EXP
+                        </button>
+                    `;
+
+                }
+
+
+                html += `
+
+                    <div
+                        class="
+                            collection-card
+                            ${isActive ? "active" : ""}
+                            ${!isOwned ? "locked" : ""}
+                        "
+                    >
+
+                        <div class="skin">
+                            ${skin.emoji}
+                        </div>
+
+                        <div class="skin-name">
+                            ${skin.nama}
+                        </div>
+
+                        <div class="skin-description">
+                            ${skin.deskripsi}
+                        </div>
+
+                        <div class="skin-status">
+                            ${status}
+                        </div>
+
+                        ${button}
+
+                    </div>
+
+                `;
+
+            }
+        );
+
+
+        grid.innerHTML =
+            html;
+
+    }
+
+
+    function kembaliKeMenu() {
+
+        window.location.href =
+            "/menu";
+
+    }
+
+
+    function applyTheme() {
+
+        const theme =
+            localStorage.getItem(
+                "theme"
+            ) || "light";
+
+
+        if (theme === "dark") {
+
+            document.body.classList.add(
+                "dark-mode"
+            );
+
+            document.getElementById(
+                "themeButton"
+            ).textContent =
+                "☀️ Mode Terang";
+
+        } else {
+
+            document.body.classList.remove(
+                "dark-mode"
+            );
+
+            document.getElementById(
+                "themeButton"
+            ).textContent =
+                "🌙 Mode Gelap";
+
+        }
+
+    }
+
+
+    function ubahTema() {
+
+        const sekarang =
+            localStorage.getItem(
+                "theme"
+            ) || "light";
+
+
+        localStorage.setItem(
+            "theme",
+            sekarang === "dark"
+                ? "light"
+                : "dark"
+        );
+
+
+        applyTheme();
+
+    }
+
+
+    applyTheme();
+
+    updateEXP();
+
+    renderKoleksi();
+
+</script>
+
+</body>
+</html>

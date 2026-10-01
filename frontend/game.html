@@ -1,0 +1,2024 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Game - Belajar AI</title>
+
+    <link
+        rel="stylesheet"
+        href="/css/style.css"
+    >
+
+    <style>
+
+        .game-menu {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .game-card {
+            padding: 20px;
+            background: var(--card-bg, white);
+            color: var(--text-color, #222);
+            border-radius: 16px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .game-card:hover {
+            border-color: var(--text-color, #111);
+        }
+
+        .game-icon {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .game-area {
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--card-bg, white);
+            color: var(--text-color, #222);
+            border-radius: 18px;
+        }
+
+        .game-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .maze {
+            display: grid;
+            grid-template-columns: repeat(11, 1fr);
+            width: min(100%, 440px);
+            margin: 20px auto;
+            border: 4px solid var(--maze-wall, #111);
+            background: var(--maze-wall, #111);
+            gap: 2px;
+        }
+
+        .maze-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--maze-cell, #eee);
+            color: var(--text-color, #222);
+            font-size: 20px;
+            user-select: none;
+        }
+
+        .maze-wall {
+            background: var(--maze-wall, #111);
+        }
+
+        .maze-player {
+            background: var(--maze-player, #ddd);
+            font-size: 25px;
+        }
+
+        .maze-door {
+            background: var(--maze-door, #aaa);
+            font-size: 22px;
+        }
+
+        .maze-goal {
+            background: var(--maze-goal, #ddd);
+            font-size: 22px;
+        }
+
+        .joystick {
+            width: 210px;
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .joystick button {
+            min-height: 55px;
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .memory-card {
+            min-height: 110px;
+            padding: 10px;
+            background: var(--memory-closed, #111);
+            color: var(--memory-closed-text, white);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            font-weight: bold;
+            user-select: none;
+        }
+
+        .memory-card.open,
+        .memory-card.matched {
+            background: var(--memory-open, #eee);
+            color: var(--memory-open-text, #111);
+        }
+
+        .memory-card.matched {
+            opacity: 0.65;
+        }
+
+        .puzzle-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .puzzle-item {
+            padding: 16px;
+            background: var(--puzzle-bg, #eee);
+            color: var(--text-color, #222);
+            border-radius: 12px;
+            cursor: grab;
+            border: 2px solid transparent;
+            user-select: none;
+        }
+
+        .puzzle-item.selected {
+            border-color: var(--text-color, #111);
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 12px;
+            background: var(--feedback-bg, #f5f5f5);
+            color: var(--text-color, #222);
+            line-height: 1.6;
+        }
+
+        .back-button {
+            width: 100%;
+            display: block;
+            margin: 0 0 15px 0;
+            min-height: 48px;
+        }
+
+        .puzzle-card-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .puzzle-correct {
+            border: 2px solid var(--text-color, #222);
+            opacity: 0.8;
+        }
+
+        .puzzle-choice {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            background: var(--choice-bg, #fff);
+        }
+
+        /* =========================
+           MODE GELAP
+        ========================= */
+
+        body.dark-mode {
+
+            --card-bg: #1e1e1e;
+            --text-color: #f1f1f1;
+
+            --maze-wall: #050505;
+            --maze-cell: #303030;
+            --maze-player: #444;
+            --maze-door: #555;
+            --maze-goal: #444;
+
+            --memory-closed: #050505;
+            --memory-closed-text: #ffffff;
+            --memory-open: #303030;
+            --memory-open-text: #ffffff;
+
+            --puzzle-bg: #303030;
+            --feedback-bg: #292929;
+            --choice-bg: #383838;
+        }
+
+        /* =========================
+           MODE TERANG
+        ========================= */
+
+        body:not(.dark-mode) {
+
+            --card-bg: #ffffff;
+            --text-color: #222222;
+
+            --maze-wall: #111111;
+            --maze-cell: #eeeeee;
+            --maze-player: #dddddd;
+            --maze-door: #aaaaaa;
+            --maze-goal: #dddddd;
+
+            --memory-closed: #111111;
+            --memory-closed-text: #ffffff;
+            --memory-open: #eeeeee;
+            --memory-open-text: #111111;
+
+            --puzzle-bg: #eeeeee;
+            --feedback-bg: #f5f5f5;
+            --choice-bg: #ffffff;
+        }
+
+        @media (max-width: 600px) {
+
+            .back-button {
+                width: 100%;
+                min-height: 50px;
+            }
+
+            .game-menu {
+                grid-template-columns: 1fr;
+            }
+
+            .memory-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .memory-card {
+                min-height: 100px;
+            }
+
+        }
+
+    </style>
+
+    <script src="/js/theme.js"></script>
+
+</head>
+
+
+<body>
+
+<button
+    data-theme-toggle
+    style="
+        position: fixed;
+        top: 12px;
+        right: 12px;
+        z-index: 9999;
+        width: auto;
+    "
+>
+    🌙 Mode Gelap
+</button>
+
+
+<main>
+
+    <h1>🎮 Game Belajar</h1>
+
+
+    <div class="exp-bar-container">
+
+        <div class="exp-header">
+
+            <div class="exp-logo">
+
+                <span class="exp-icon">
+                    ⭐
+                </span>
+
+                <span>
+                    EXP
+                </span>
+
+            </div>
+
+
+            <div class="level-text">
+
+                Level
+                <span id="level">
+                    1
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="exp-text">
+
+            <span id="expSekarang">
+                0
+            </span>
+
+            /
+
+            <span id="expBerikutnya">
+                100
+            </span>
+
+            EXP
+
+        </div>
+
+
+        <div class="exp-progress">
+
+            <div
+                id="expFill"
+                class="exp-progress-fill"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+    <div class="game-menu">
+
+        <div
+            class="game-card"
+            onclick="mulaiMaze()"
+        >
+
+            <span class="game-icon">
+                🗺️
+            </span>
+
+            <strong>
+                Maze
+            </strong>
+
+            <p>
+                Gerakkan karakter,
+                cari jalan, dan jawab tantangan.
+            </p>
+
+        </div>
+
+
+        <div
+            class="game-card"
+            onclick="mulaiMemory()"
+        >
+
+            <span class="game-icon">
+                🧠
+            </span>
+
+            <strong>
+                Memory
+            </strong>
+
+            <p>
+                Buka kartu, cari pasangan,
+                dan latih ingatan.
+            </p>
+
+        </div>
+
+
+        <div
+            class="game-card"
+            onclick="mulaiPuzzle()"
+        >
+
+            <span class="game-icon">
+                🧩
+            </span>
+
+            <strong>
+                Puzzle
+            </strong>
+
+            <p>
+                Susun bagian materi
+                menjadi urutan yang benar.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="gameArea"
+        class="game-area"
+    >
+
+        <h2>
+            Pilih permainan
+        </h2>
+
+        <p>
+            Setiap permainan menggunakan
+            materi yang sudah kamu pelajari.
+        </p>
+
+    </div>
+
+</main>
+
+
+<script>
+
+let paket = null;
+
+let skor = 0;
+
+let expSession = 0;
+
+let selectedSkinEmoji = "🧑";
+
+function getSelectedSkinEmoji() {
+    const skinEmojiMap = {
+        default: "🧑",
+        robot: "🤖",
+        wizard: "🧙",
+        ninja: "🥷",
+        astronaut: "🧑‍🚀",
+        scientist: "🧑‍🔬"
+    };
+
+    const selected =
+        localStorage.getItem("ruangBelajarSkin") || "default";
+
+    return skinEmojiMap[selected] || skinEmojiMap.default;
+}
+
+selectedSkinEmoji = getSelectedSkinEmoji();
+
+
+/* =========================
+   EXP
+========================= */
+
+function updateEXP() {
+
+    const exp =
+        Number(
+            localStorage.getItem("exp") || 0
+        );
+
+    const level =
+        Math.floor(exp / 100) + 1;
+
+    const expDalamLevel =
+        exp % 100;
+
+    document.getElementById(
+        "level"
+    ).innerText =
+        level;
+
+    document.getElementById(
+        "expSekarang"
+    ).innerText =
+        expDalamLevel;
+
+    document.getElementById(
+        "expBerikutnya"
+    ).innerText =
+        100;
+
+    document.getElementById(
+        "expFill"
+    ).style.width =
+        expDalamLevel + "%";
+}
+
+
+function tambahEXP(jumlah) {
+
+    const exp =
+        Number(
+            localStorage.getItem("exp") || 0
+        );
+
+    localStorage.setItem(
+        "exp",
+        exp + jumlah
+    );
+
+    expSession += jumlah;
+
+    updateEXP();
+}
+
+
+/* =========================
+   LOAD PACKAGE
+========================= */
+
+function loadPackage() {
+
+    const data =
+        localStorage.getItem(
+            "paketBelajar"
+        );
+
+    if (!data) {
+
+        document.getElementById(
+            "gameArea"
+        ).innerHTML = `
+
+            <button
+                class="back-button"
+                onclick="kembaliMateri()"
+            >
+                ← Kembali ke Materi
+            </button>
+
+            <h2>
+                ❌ Paket belajar belum tersedia
+            </h2>
+
+            <p>
+                Pelajari materi terlebih dahulu.
+            </p>
+
+            <button
+                onclick="location.href='/materi'"
+            >
+                📖 Kembali ke Materi
+            </button>
+
+        `;
+
+        return false;
+    }
+
+    try {
+
+        paket =
+            JSON.parse(data);
+
+        return true;
+
+    } catch (error) {
+
+        console.error(error);
+
+        return false;
+    }
+}
+
+
+/* =========================
+   MAZE
+========================= */
+
+const mazeMap = [
+
+    [1,1,1,1,1,1,1,1,1,1,1],
+
+    [1,0,0,0,1,0,0,0,0,0,1],
+
+    [1,0,1,0,1,0,1,1,1,0,1],
+
+    [1,0,1,0,0,0,1,0,0,0,1],
+
+    [1,0,1,1,1,1,1,0,1,0,1],
+
+    [1,0,0,0,0,0,0,0,1,0,1],
+
+    [1,1,1,1,1,1,1,0,1,0,1],
+
+    [1,0,0,0,0,0,0,0,1,0,1],
+
+    [1,1,1,1,1,1,1,1,1,1,1]
+
+];
+
+
+let player = {
+    row: 1,
+    col: 1
+};
+
+
+let doors = [
+
+    {
+        row: 3,
+        col: 5,
+        used: false
+    },
+
+    {
+        row: 5,
+        col: 7,
+        used: false
+    },
+
+    {
+        row: 7,
+        col: 7,
+        used: false
+    }
+
+];
+
+
+let mazeChallenges = [];
+
+let mazeChallengeIndex = 0;
+
+
+function mulaiMaze() {
+
+    if (!loadPackage()) {
+        return;
+    }
+
+    skor = 0;
+
+    mazeChallengeIndex = 0;
+
+    mazeChallenges =
+        shuffle(
+            [
+                ...(paket.game?.maze || [])
+            ]
+        );
+
+    player = {
+        row: 1,
+        col: 1
+    };
+
+    doors.forEach(
+        door => door.used = false
+    );
+
+    tampilkanMaze();
+}
+
+
+function tampilkanMaze() {
+
+    const area =
+        document.getElementById(
+            "gameArea"
+        );
+
+    let html = `
+
+        <button
+            class="back-button"
+            onclick="kembaliMateri()"
+        >
+            ← Kembali ke Materi
+        </button>
+
+        <div class="game-top">
+
+            <span>
+                🗺️ Maze
+            </span>
+
+            <span>
+                ⭐ Skor: ${skor}
+            </span>
+
+        </div>
+
+        <p>
+            Gunakan tombol panah / WASD
+            atau tombol di bawah.
+        </p>
+
+        <div
+            id="maze"
+            class="maze"
+        >
+    `;
+
+
+    for (
+        let row = 0;
+        row < mazeMap.length;
+        row++
+    ) {
+
+        for (
+            let col = 0;
+            col < mazeMap[row].length;
+            col++
+        ) {
+
+            const isPlayer =
+                player.row === row &&
+                player.col === col;
+
+            const door =
+                doors.find(
+                    item =>
+                        item.row === row &&
+                        item.col === col
+                );
+
+            let kelas =
+                "maze-cell";
+
+            let isi = "";
+
+            if (
+                mazeMap[row][col] === 1
+            ) {
+
+                kelas +=
+                    " maze-wall";
+
+            } else if (isPlayer) {
+
+                kelas +=
+                    " maze-player";
+
+                isi = selectedSkinEmoji;
+
+            } else if (
+                door &&
+                !door.used
+            ) {
+
+                kelas +=
+                    " maze-door";
+
+                isi = "🚪";
+
+            } else if (
+                row === 7 &&
+                col === 7
+            ) {
+
+                kelas +=
+                    " maze-goal";
+
+                isi = "🏁";
+            }
+
+            html += `
+                <div class="${kelas}">
+                    ${isi}
+                </div>
+            `;
+        }
+    }
+
+
+    html += `
+        </div>
+
+        <div class="joystick">
+
+            <div></div>
+
+            <button
+                onclick="gerakMaze(-1,0)"
+            >
+                ⬆️
+            </button>
+
+            <div></div>
+
+
+            <button
+                onclick="gerakMaze(0,-1)"
+            >
+                ⬅️
+            </button>
+
+            <button
+                onclick="gerakMaze(1,0)"
+            >
+                ⬇️
+            </button>
+
+            <button
+                onclick="gerakMaze(0,1)"
+            >
+                ➡️
+            </button>
+
+        </div>
+
+        <div
+            id="mazeFeedback"
+            class="feedback"
+        >
+            Cari pintu 🚪.
+        </div>
+    `;
+
+    area.innerHTML =
+        html;
+}
+
+
+function gerakMaze(
+    rowDelta,
+    colDelta
+) {
+
+    const targetRow =
+        player.row + rowDelta;
+
+    const targetCol =
+        player.col + colDelta;
+
+    if (
+        targetRow < 0 ||
+        targetRow >= mazeMap.length ||
+        targetCol < 0 ||
+        targetCol >= mazeMap[0].length
+    ) {
+
+        return;
+    }
+
+    if (
+        mazeMap[targetRow][targetCol] === 1
+    ) {
+
+        return;
+    }
+
+    player.row =
+        targetRow;
+
+    player.col =
+        targetCol;
+
+    const door =
+        doors.find(
+            item =>
+                item.row === player.row &&
+                item.col === player.col
+        );
+
+    if (
+        door &&
+        !door.used
+    ) {
+
+        door.used = true;
+
+        tampilkanMaze();
+
+        bukaTantanganMaze();
+
+        return;
+    }
+
+    if (
+        player.row === 7 &&
+        player.col === 7
+    ) {
+
+        selesaiMaze();
+
+        return;
+    }
+
+    tampilkanMaze();
+}
+
+
+function bukaTantanganMaze() {
+
+    if (
+        mazeChallengeIndex >=
+        mazeChallenges.length
+    ) {
+
+        tampilkanMaze();
+
+        return;
+    }
+
+    const soal =
+        mazeChallenges[
+            mazeChallengeIndex
+        ];
+
+    const area =
+        document.getElementById(
+            "gameArea"
+        );
+
+    let html = `
+
+        <button
+            class="back-button"
+            onclick="kembaliMateri()"
+        >
+            ← Kembali ke Materi
+        </button>
+
+        <div class="game-top">
+
+            <span>
+                🚪 Tantangan Pintu
+            </span>
+
+            <span>
+                ⭐ Skor: ${skor}
+            </span>
+
+        </div>
+
+        <h2>
+            ${escapeHTML(
+                soal.pertanyaan
+            )}
+        </h2>
+
+    `;
+
+
+    soal.pilihan.forEach(
+        (pilihan, index) => {
+
+            html += `
+
+                <button
+                    onclick="jawabMaze(${index})"
+                >
+                    ${escapeHTML(
+                        pilihan
+                    )}
+                </button>
+
+            `;
+        }
+    );
+
+
+    area.innerHTML =
+        html;
+}
+
+
+function jawabMaze(pilihan) {
+
+    const soal =
+        mazeChallenges[
+            mazeChallengeIndex
+        ];
+
+    const benar =
+        pilihan === soal.jawaban;
+
+    if (benar) {
+
+        skor += 10;
+
+        tambahEXP(10);
+
+    }
+
+    mazeChallengeIndex++;
+
+    document.getElementById(
+        "gameArea"
+    ).innerHTML = `
+
+        <h2>
+            ${
+                benar
+                ? "✅ Benar!"
+                : "❌ Belum tepat"
+            }
+        </h2>
+
+        <div class="feedback">
+
+            <strong>
+                Penjelasan:
+            </strong>
+
+            <p>
+                ${escapeHTML(
+                    soal.penjelasan
+                )}
+            </p>
+
+        </div>
+
+        <button
+            onclick="lanjutMaze()"
+        >
+            Lanjut 🚪
+        </button>
+
+    `;
+}
+
+
+function lanjutMaze() {
+
+    tampilkanMaze();
+}
+
+
+function selesaiMaze() {
+
+    tambahEXP(20);
+
+    document.getElementById(
+        "gameArea"
+    ).innerHTML = `
+
+        <button
+            class="back-button"
+            onclick="kembaliMateri()"
+        >
+            ← Kembali ke Materi
+        </button>
+
+        <h2>
+            🏆 Maze Selesai!
+        </h2>
+
+        <p>
+            Skor: ${skor}
+        </p>
+
+        <p>
+            Bonus selesai: +20 EXP
+        </p>
+
+        <button
+            onclick="mulaiMaze()"
+        >
+            🔄 Main Maze Lagi
+        </button>
+
+    `;
+}
+
+
+/* =========================
+   MEMORY
+========================= */
+
+let memoryCards = [];
+
+let memoryOpen = [];
+
+let memoryMatched = 0;
+
+let memoryLock = false;
+
+
+function mulaiMemory() {
+
+    if (!loadPackage()) {
+        return;
+    }
+
+    skor = 0;
+
+    memoryMatched = 0;
+
+    memoryOpen = [];
+
+    memoryLock = false;
+
+    const pairs =
+        shuffle(
+            [
+                ...(paket.game?.memory || [])
+            ]
+        ).slice(0, 6);
+
+    memoryCards = [];
+
+    pairs.forEach(
+        pair => {
+
+            memoryCards.push({
+                id:
+                    pair.id + "-a",
+
+                pairId:
+                    pair.id,
+
+                text:
+                    pair.kiri,
+
+                open:
+                    false,
+
+                matched:
+                    false
+            });
+
+            memoryCards.push({
+                id:
+                    pair.id + "-b",
+
+                pairId:
+                    pair.id,
+
+                text:
+                    pair.kanan,
+
+                open:
+                    false,
+
+                matched:
+                    false
+            });
+
+        }
+    );
+
+    memoryCards =
+        shuffle(memoryCards);
+
+    tampilkanMemory();
+}
+
+
+function tampilkanMemory() {
+
+    const area =
+        document.getElementById(
+            "gameArea"
+        );
+
+    let html = `
+
+        <button
+            class="back-button"
+            onclick="kembaliMateri()"
+        >
+            ← Kembali ke Materi
+        </button>
+
+        <div class="game-top">
+
+            <span>
+                🧠 Memory
+            </span>
+
+            <span>
+                ⭐ Skor: ${skor}
+            </span>
+
+        </div>
+
+        <p>
+            Buka dua kartu.
+            Cari pasangan yang tepat.
+        </p>
+
+        <div class="memory-grid">
+    `;
+
+
+    memoryCards.forEach(
+        (card, index) => {
+
+            const terbuka =
+                card.open ||
+                card.matched;
+
+            html += `
+
+                <div
+                    class="
+                        memory-card
+                        ${
+                            terbuka
+                            ? "open"
+                            : ""
+                        }
+                        ${
+                            card.matched
+                            ? "matched"
+                            : ""
+                        }
+                    "
+                    onclick="
+                        bukaMemory(${index})
+                    "
+                >
+                    ${
+                        terbuka
+                        ? escapeHTML(
+                            card.text
+                        )
+                        : "?"
+                    }
+                </div>
+
+            `;
+        }
+    );
+
+
+    html += `
+        </div>
+
+        <div
+            id="memoryFeedback"
+            class="feedback"
+        >
+            Pasangan ditemukan:
+            ${memoryMatched}
+            / ${memoryCards.length / 2}
+        </div>
+    `;
+
+    area.innerHTML =
+        html;
+}
+
+
+function bukaMemory(index) {
+
+    if (memoryLock) {
+        return;
+    }
+
+    const card =
+        memoryCards[index];
+
+    if (
+        card.open ||
+        card.matched
+    ) {
+
+        return;
+    }
+
+    if (
+        memoryOpen.length >= 2
+    ) {
+
+        return;
+    }
+
+    card.open = true;
+
+    memoryOpen.push(index);
+
+    tampilkanMemory();
+
+    if (
+        memoryOpen.length === 2
+    ) {
+
+        memoryLock = true;
+
+        const first =
+            memoryCards[
+                memoryOpen[0]
+            ];
+
+        const second =
+            memoryCards[
+                memoryOpen[1]
+            ];
+
+        if (
+            first.pairId ===
+            second.pairId
+        ) {
+
+            setTimeout(
+                () => {
+
+                    first.matched =
+                        true;
+
+                    second.matched =
+                        true;
+
+                    first.open =
+                        false;
+
+                    second.open =
+                        false;
+
+                    memoryOpen = [];
+
+                    memoryLock = false;
+
+                    memoryMatched++;
+
+                    skor += 15;
+
+                    tambahEXP(15);
+
+                    tampilkanMemory();
+
+                    if (
+                        memoryMatched ===
+                        memoryCards.length / 2
+                    ) {
+
+                        setTimeout(
+                            selesaiMemory,
+                            500
+                        );
+                    }
+
+                },
+                500
+            );
+
+        } else {
+
+            setTimeout(
+                () => {
+
+                    first.open =
+                        false;
+
+                    second.open =
+                        false;
+
+                    memoryOpen = [];
+
+                    memoryLock = false;
+
+                    tampilkanMemory();
+
+                },
+                900
+            );
+        }
+    }
+}
+
+
+function selesaiMemory() {
+
+    tambahEXP(25);
+
+    document.getElementById(
+        "gameArea"
+    ).innerHTML = `
+
+        <button
+            class="back-button"
+            onclick="kembaliMateri()"
+        >
+            ← Kembali ke Materi
+        </button>
+
+        <h2>
+            🏆 Memory Selesai!
+        </h2>
+
+        <p>
+            Semua pasangan ditemukan.
+        </p>
+
+        <p>
+            Skor: ${skor}
+        </p>
+
+        <p>
+            Bonus selesai: +25 EXP
+        </p>
+
+        <button
+            onclick="mulaiMemory()"
+        >
+            🔄 Main Memory Lagi
+        </button>
+
+    `;
+}
+
+
+/* =========================
+   PUZZLE
+========================= */
+
+let puzzleItems = [];
+let puzzleSelected = null;
+let puzzleSolved = 0;
+let puzzleTotal = 0;
+
+function mulaiPuzzle() {
+
+    if (!loadPackage()) {
+        return;
+    }
+
+    skor = 0;
+    puzzleSelected = null;
+    puzzleSolved = 0;
+
+    const sumber = [
+        ...(paket.game?.puzzle || [])
+    ];
+
+    if (sumber.length < 2) {
+
+        document.getElementById(
+            "gameArea"
+        ).innerHTML = `
+
+            <button
+                class="back-button"
+                onclick="kembaliMateri()"
+            >
+                ← Kembali ke Materi
+            </button>
+
+            <h2>
+                🧩 Puzzle belum tersedia
+            </h2>
+
+            <div class="feedback">
+
+                <p>
+                    Paket belajar ini belum memiliki
+                    cukup data Puzzle.
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+    puzzleItems = shuffle(
+        sumber.map((item, index) => ({
+            id: "puzzle_" + index,
+            teks: item.teks,
+            jawaban: String(item.urutan),
+            pilihan: [],
+            dipilih: null,
+            benar: false
+        }))
+    ).slice(
+        0,
+        Math.min(6, sumber.length)
+    );
+
+    puzzleTotal =
+        puzzleItems.length;
+
+    const semuaKunci = shuffle(
+        [
+            ...new Set(
+                puzzleItems.map(
+                    item => item.jawaban
+                )
+            )
+        ]
+    );
+
+    puzzleItems.forEach(
+        item => {
+
+            item.pilihan =
+                shuffle([
+                    item.jawaban,
+
+                    ...semuaKunci.filter(
+                        kunci =>
+                            kunci !==
+                            item.jawaban
+                    )
+
+                ]).slice(
+                    0,
+                    Math.min(
+                        4,
+                        semuaKunci.length
+                    )
+                );
+        }
+    );
+
+    tampilkanPuzzle();
+}
+
+
+function tampilkanPuzzle() {
+
+    const area =
+        document.getElementById(
+            "gameArea"
+        );
+
+    let html = `
+
+        <button
+            class="back-button"
+            onclick="kembaliMateri()"
+        >
+            ← Kembali ke Materi
+        </button>
+
+        <div class="game-top">
+
+            <span>
+                🧩 Puzzle Konsep
+            </span>
+
+            <span>
+                ⭐ Skor: ${skor}
+            </span>
+
+        </div>
+
+        <h2>
+            Cocokkan Konsep
+        </h2>
+
+        <p>
+            Pilih satu kartu, lalu pilih konsep
+            yang paling cocok dengan isi kartu tersebut.
+        </p>
+
+        <p>
+            Setiap jawaban langsung mendapat penjelasan.
+            Di HP cukup tap kartu dan pilihan.
+        </p>
+
+        <div class="puzzle-list">
+    `;
+
+    puzzleItems.forEach(
+        (item, index) => {
+
+            const status =
+                item.benar
+                    ? "puzzle-item puzzle-correct"
+                    : puzzleSelected === index
+                        ? "puzzle-item selected"
+                        : "puzzle-item";
+
+            html += `
+
+                <div
+                    class="${status}"
+                    onclick="pilihPuzzleKartu(${index})"
+                >
+
+                    <div class="puzzle-card-head">
+
+                        <strong>
+                            Konsep ${index + 1}
+                        </strong>
+
+                        ${
+                            item.benar
+                                ? "<span>✅</span>"
+                                : puzzleSelected === index
+                                    ? "<span>🎯</span>"
+                                    : "<span>🧩</span>"
+                        }
+
+                    </div>
+
+                    <p>
+                        ${escapeHTML(item.teks)}
+                    </p>
+
+                    ${
+                        item.dipilih !== null
+                            ? `
+                                <div class="puzzle-choice">
+                                    Pilihan:
+                                    <strong>
+                                        Konsep ${escapeHTML(item.dipilih)}
+                                    </strong>
+                                </div>
+                            `
+                            : `
+                                <small>
+                                    Tap kartu untuk memilih
+                                </small>
+                            `
+                    }
+
+                </div>
+            `;
+        }
+    );
+
+    html += `
+
+        </div>
+
+        <div
+            id="puzzleOptions"
+            class="feedback"
+        >
+
+            ${
+                puzzleSelected === null
+                    ? "Pilih salah satu kartu di atas."
+                    : buatPilihanPuzzle(
+                        puzzleSelected
+                    )
+            }
+
+        </div>
+
+        <button
+            onclick="mulaiPuzzle()"
+        >
+            🔀 Tantangan Baru
+        </button>
+    `;
+
+    area.innerHTML =
+        html;
+}
+
+
+function pilihPuzzleKartu(index) {
+
+    if (
+        puzzleItems[index].benar
+    ) {
+
+        return;
+    }
+
+    puzzleSelected =
+        index;
+
+    tampilkanPuzzle();
+}
+
+
+function buatPilihanPuzzle(index) {
+
+    const item =
+        puzzleItems[index];
+
+    let html = `
+
+        <h3>
+            🎯 Pilih konsep yang cocok
+        </h3>
+
+        <p>
+            Kartu:
+            <strong>
+                ${escapeHTML(
+                    item.teks
+                )}
+            </strong>
+        </p>
+    `;
+
+    item.pilihan.forEach(
+        kunci => {
+
+            html += `
+
+                <button
+                    onclick="jawabPuzzle(
+                        ${index},
+                        '${escapeHTML(kunci)}'
+                    )"
+                >
+                    Konsep
+                    ${escapeHTML(kunci)}
+                </button>
+
+            `;
+        }
+    );
+
+    return html;
+}
+
+
+function jawabPuzzle(
+    index,
+    pilihan
+) {
+
+    const item =
+        puzzleItems[index];
+
+    if (
+        item.benar
+    ) {
+
+        return;
+    }
+
+    const benar =
+        String(pilihan) ===
+        String(item.jawaban);
+
+    item.dipilih =
+        pilihan;
+
+    const feedback =
+        document.getElementById(
+            "puzzleOptions"
+        );
+
+    if (benar) {
+
+        item.benar =
+            true;
+
+        puzzleSolved++;
+
+        skor += 15;
+
+        tambahEXP(15);
+
+        puzzleSelected =
+            null;
+
+        tampilkanPuzzle();
+
+        if (
+            puzzleSolved ===
+            puzzleTotal
+        ) {
+
+            setTimeout(
+                selesaiPuzzle,
+                500
+            );
+        }
+
+        return;
+    }
+
+    feedback.innerHTML = `
+
+        <h3>
+            ❌ Belum tepat
+        </h3>
+
+        <p>
+            Pilihanmu belum cocok
+            dengan konsep ini.
+        </p>
+
+        <p>
+            Coba pahami kembali bagian materi tersebut,
+            lalu pilih konsep yang lebih sesuai.
+        </p>
+
+        <button
+            onclick="cobaLagiPuzzle(${index})"
+        >
+            🔁 Coba Lagi
+        </button>
+
+    `;
+}
+
+
+function cobaLagiPuzzle(index) {
+
+    puzzleItems[index].dipilih =
+        null;
+
+    puzzleSelected =
+        index;
+
+    tampilkanPuzzle();
+}
+
+
+function selesaiPuzzle() {
+
+    tambahEXP(25);
+
+    document.getElementById(
+        "gameArea"
+    ).innerHTML = `
+
+        <button
+            class="back-button"
+            onclick="kembaliMateri()"
+        >
+            ← Kembali ke Materi
+        </button>
+
+        <h2>
+            🏆 Puzzle Selesai!
+        </h2>
+
+        <p>
+            Semua konsep berhasil dicocokkan.
+        </p>
+
+        <p>
+            Skor: ${skor}
+        </p>
+
+        <p>
+            Bonus selesai: +25 EXP
+        </p>
+
+        <button
+            onclick="mulaiPuzzle()"
+        >
+            🔄 Main Puzzle Lagi
+        </button>
+
+    `;
+}
+
+
+/* =========================
+   KEYBOARD MAZE
+========================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        const key =
+            event.key.toLowerCase();
+
+        if (
+            key === "arrowup" ||
+            key === "w"
+        ) {
+
+            event.preventDefault();
+
+            gerakMaze(
+                -1,
+                0
+            );
+
+        } else if (
+            key === "arrowdown" ||
+            key === "s"
+        ) {
+
+            event.preventDefault();
+
+            gerakMaze(
+                1,
+                0
+            );
+
+        } else if (
+            key === "arrowleft" ||
+            key === "a"
+        ) {
+
+            event.preventDefault();
+
+            gerakMaze(
+                0,
+                -1
+            );
+
+        } else if (
+            key === "arrowright" ||
+            key === "d"
+        ) {
+
+            event.preventDefault();
+
+            gerakMaze(
+                0,
+                1
+            );
+
+        }
+
+    }
+);
+
+
+function kembaliMateri() {
+
+    const aktifId =
+        localStorage.getItem(
+            "materiAktifId"
+        );
+
+    if (aktifId) {
+
+        location.href =
+            "/materi";
+
+    } else {
+
+        location.href =
+            "/menu";
+
+    }
+
+}
+
+
+/* =========================
+   UTILITIES
+========================= */
+
+function shuffle(array) {
+
+    const hasil =
+        [...array];
+
+    for (
+        let i = hasil.length - 1;
+        i > 0;
+        i--
+    ) {
+
+        const j =
+            Math.floor(
+                Math.random() *
+                (i + 1)
+            );
+
+        [
+            hasil[i],
+            hasil[j]
+        ] = [
+            hasil[j],
+            hasil[i]
+        ];
+
+    }
+
+    return hasil;
+}
+
+
+function escapeHTML(teks) {
+
+    return String(teks)
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+}
+
+
+updateEXP();
+
+loadPackage();
+
+</script>
+
+</body>
+
+</html>

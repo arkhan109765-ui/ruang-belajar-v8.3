@@ -1,0 +1,2192 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Materi - Ruang Belajar</title>
+
+    <link
+        rel="stylesheet"
+        href="/css/style.css"
+    >
+
+    <style>
+        .section-card {
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 18px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+
+        .section-title {
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .section-description {
+            color: #666;
+            font-size: 14px;
+            margin-top: 0;
+        }
+
+        .materi-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .materi-item {
+            border: 1px solid #e5e5e5;
+            border-radius: 16px;
+            padding: 16px;
+            background: #fafafa;
+        }
+
+        .materi-item-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            word-break: break-word;
+        }
+
+        .materi-item-info {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .materi-item-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .materi-item-actions button {
+            width: auto;
+            margin: 0;
+        }
+
+        .secondary-button {
+            background: #e9e9e9;
+            color: #222;
+        }
+
+        .danger-button {
+            background: #b00020;
+            color: white;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 220px;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 14px;
+            resize: vertical;
+            font-size: 15px;
+            line-height: 1.6;
+            box-sizing: border-box;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            min-height: 48px;
+            padding: 12px 14px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 16px;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+        }
+
+        .hasil-card {
+            background: #fafafa;
+            border: 1px solid #e5e5e5;
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 16px;
+        }
+
+        .hasil-text {
+            white-space: pre-wrap;
+            line-height: 1.8;
+        }
+
+        .konsep-list,
+        .contoh-list {
+            line-height: 1.8;
+            padding-left: 24px;
+        }
+
+        .status-text {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .empty-text {
+            color: #777;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .back-button {
+            background: #e9e9e9;
+            color: #222;
+            width: auto;
+        }
+
+        .search-box {
+            margin-top: 16px;
+        }
+
+        .upload-box {
+            margin-top: 16px;
+            margin-bottom: 16px;
+            padding: 16px;
+            background: #fafafa;
+            border: 2px dashed #d5d5d5;
+            border-radius: 16px;
+        }
+
+        .upload-box-title {
+            margin: 0 0 6px;
+            font-size: 17px;
+        }
+
+        .upload-box-text {
+            margin: 0 0 12px;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .upload-box input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background: white;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .upload-status {
+            margin-top: 10px;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        .aktif-badge {
+            display: inline-block;
+            background: #111;
+            color: white;
+            border-radius: 999px;
+            padding: 5px 10px;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .loading-text {
+            color: #666;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .materi-item-actions {
+                flex-direction: column;
+            }
+
+            .materi-item-actions button {
+                width: 100%;
+            }
+
+            .back-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+<main>
+
+    <button
+        type="button"
+        class="back-button"
+        onclick="window.location.href='/menu'"
+    >
+        ← Kembali ke Menu
+    </button>
+
+
+    <h1>
+        📚 Materi
+    </h1>
+
+    <p>
+        Simpan materi, pelajari dengan AI, dan buka kembali kapan saja.
+    </p>
+
+
+    <!-- ========================= -->
+    <!-- EXP -->
+    <!-- ========================= -->
+
+    <div class="exp-bar-container">
+
+        <div class="exp-header">
+
+            <div class="exp-logo">
+
+                <span class="exp-icon">
+                    ⭐
+                </span>
+
+                <span>
+                    EXP
+                </span>
+
+            </div>
+
+
+            <div class="level-text">
+
+                Level
+
+                <span id="level">
+                    1
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="exp-text">
+
+            <span id="expSekarang">
+                0
+            </span>
+
+            /
+
+            <span id="expBerikutnya">
+                100
+            </span>
+
+            EXP
+
+        </div>
+
+
+        <div class="exp-progress">
+
+            <div
+                id="expFill"
+                class="exp-progress-fill"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- MATERI SAYA -->
+    <!-- ========================= -->
+
+    <div class="section-card">
+
+        <h2 class="section-title">
+            Materi Saya
+        </h2>
+
+        <p class="section-description">
+            Semua materi yang pernah kamu simpan akan muncul di sini.
+        </p>
+
+
+        <div class="search-box">
+
+            <input
+                id="searchMateri"
+                type="text"
+                placeholder="Cari materi..."
+                autocomplete="off"
+                oninput="tampilkanMateri()"
+            >
+
+        </div>
+
+
+        <div
+            id="daftarMateri"
+            class="materi-list"
+        ></div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- TAMBAH MATERI -->
+    <!-- ========================= -->
+
+    <div class="section-card">
+
+        <h2 class="section-title">
+            Tambah Materi
+        </h2>
+
+        <p class="section-description">
+            Masukkan materi yang ingin dipelajari.
+        </p>
+
+
+        <div class="upload-box">
+
+            <h3 class="upload-box-title">
+                📎 Masukkan dari File
+            </h3>
+
+            <p class="upload-box-text">
+                Bisa membaca PDF, DOCX, TXT, PPTX, CSV, dan XLSX.
+                Setelah dibaca, isi file akan masuk ke kotak materi di bawah.
+            </p>
+
+
+            <input
+                id="fileMateri"
+                type="file"
+                accept=".pdf,.docx,.txt,.pptx,.csv,.xlsx"
+            >
+
+
+            <button
+                type="button"
+                onclick="bacaFileMateri()"
+            >
+                📂 Baca File
+            </button>
+
+
+            <div
+                id="statusFile"
+                class="upload-status"
+            ></div>
+
+        </div>
+
+
+        <input
+            id="judulMateriBaru"
+            type="text"
+            placeholder="Judul materi"
+            autocomplete="off"
+        >
+
+
+        <textarea
+            id="materiBaru"
+            placeholder="Tempel materi di sini..."
+        ></textarea>
+
+
+        <button
+            type="button"
+            onclick="simpanMateriBaru()"
+        >
+            Simpan Materi
+        </button>
+
+
+        <p
+            id="statusTambah"
+            class="status-text"
+        ></p>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- MATERI AKTIF -->
+    <!-- ========================= -->
+
+    <div
+        id="areaBelajar"
+        class="section-card"
+        style="display: none;"
+    >
+
+        <div
+            id="badgeAktif"
+            class="aktif-badge"
+        >
+            Materi aktif
+        </div>
+
+
+        <h2 id="judulAktif">
+            Materi
+        </h2>
+
+
+        <!-- PENJELASAN -->
+
+        <div class="hasil-card">
+
+            <h3>
+                📖 Penjelasan
+            </h3>
+
+            <div
+                id="hasilPenjelasan"
+                class="hasil-text"
+            ></div>
+
+        </div>
+
+
+        <!-- KONSEP -->
+
+        <div
+            id="areaKonsep"
+            class="hasil-card"
+        >
+
+            <h3>
+                💡 Konsep Penting
+            </h3>
+
+            <ul
+                id="hasilKonsep"
+                class="konsep-list"
+            ></ul>
+
+        </div>
+
+
+        <!-- CONTOH -->
+
+        <div
+            id="areaContoh"
+            class="hasil-card"
+        >
+
+            <h3>
+                📝 Contoh
+            </h3>
+
+            <ul
+                id="hasilContoh"
+                class="contoh-list"
+            ></ul>
+
+        </div>
+
+
+        <!-- TANYA AI -->
+
+        <div class="hasil-card">
+
+            <h3>
+                ❓ Tanya AI
+            </h3>
+
+
+            <input
+                id="pertanyaan"
+                type="text"
+                placeholder="Apa yang masih belum kamu pahami?"
+                autocomplete="off"
+            >
+
+
+            <button
+                type="button"
+                onclick="tanyaAI()"
+            >
+                Tanya AI
+            </button>
+
+
+            <div
+                id="hasilTanya"
+                class="hasil-text"
+                style="margin-top: 15px;"
+            ></div>
+
+        </div>
+
+
+        <!-- LATIHAN -->
+
+        <div class="hasil-card">
+
+            <h3>
+                🎮 Latihan
+            </h3>
+
+            <p>
+                Gunakan materi ini untuk bermain Maze, Memory, dan Puzzle.
+            </p>
+
+
+            <button
+                type="button"
+                onclick="mulaiLatihanAktif()"
+            >
+                Mulai Latihan
+            </button>
+
+
+            <button
+                type="button"
+                class="secondary-button"
+                onclick="mulaiUjianAktif()"
+            >
+                Mulai Ujian
+            </button>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+/* ========================================================= */
+/* UTILITAS */
+/* ========================================================= */
+
+function ambilMateriSaya() {
+
+    const data =
+        localStorage.getItem("materiSaya");
+
+    if (!data) {
+        return [];
+    }
+
+    try {
+
+        const hasil =
+            JSON.parse(data);
+
+        if (!Array.isArray(hasil)) {
+            return [];
+        }
+
+        return hasil;
+
+    } catch (error) {
+
+        console.error(
+            "Gagal membaca materiSaya:",
+            error
+        );
+
+        return [];
+    }
+}
+
+
+function simpanMateriSaya(data) {
+
+    localStorage.setItem(
+        "materiSaya",
+        JSON.stringify(data)
+    );
+}
+
+
+function idSama(a, b) {
+
+    return String(a) === String(b);
+}
+
+
+function cariMateriDenganId(id) {
+
+    const daftar =
+        ambilMateriSaya();
+
+    return daftar.find(
+        function (materi) {
+
+            return idSama(
+                materi.id,
+                id
+            );
+
+        }
+    );
+}
+
+
+function buatIdBaru() {
+
+    return (
+        "materi_" +
+        Date.now() +
+        "_" +
+        Math.random()
+            .toString(36)
+            .substring(2, 8)
+    );
+}
+
+
+/* ========================================================= */
+/* EXP */
+/* ========================================================= */
+
+function updateEXP() {
+
+    const exp =
+        Number(
+            localStorage.getItem("exp") || 0
+        );
+
+    const level =
+        Math.floor(exp / 100) + 1;
+
+    const expDalamLevel =
+        exp % 100;
+
+
+    document.getElementById("level").innerText =
+        level;
+
+
+    document.getElementById("expSekarang").innerText =
+        expDalamLevel;
+
+
+    document.getElementById("expBerikutnya").innerText =
+        100;
+
+
+    document.getElementById("expFill").style.width =
+        expDalamLevel + "%";
+}
+
+
+/* ========================================================= */
+/* MIGRASI DATA LAMA */
+/* ========================================================= */
+
+function migrasiDataLama() {
+
+    let daftar =
+        ambilMateriSaya();
+
+
+    const materiLama =
+        localStorage.getItem("materi");
+
+
+    const paketLama =
+        localStorage.getItem("paketBelajar");
+
+
+    const judulLama =
+        localStorage.getItem("judulMateri");
+
+
+    if (
+        materiLama &&
+        materiLama.trim()
+    ) {
+
+        const sudahAda =
+            daftar.some(
+                function (item) {
+
+                    return (
+                        item &&
+                        String(item.materi || "").trim() ===
+                        materiLama.trim()
+                    );
+
+                }
+            );
+
+
+        if (!sudahAda) {
+
+            let paket = null;
+
+
+            if (paketLama) {
+
+                try {
+
+                    paket =
+                        JSON.parse(paketLama);
+
+                } catch (error) {
+
+                    console.warn(
+                        "Paket lama tidak dapat dibaca."
+                    );
+
+                }
+
+            }
+
+
+            daftar.unshift({
+
+                id:
+                    buatIdBaru(),
+
+                judul:
+                    judulLama &&
+                    judulLama !== "null"
+                        ? judulLama
+                        : "Materi Lama",
+
+                materi:
+                    materiLama,
+
+                paketBelajar:
+                    paket,
+
+                sudahDipelajari:
+                    Boolean(paket),
+
+                skorUjian:
+                    null,
+
+                expDidapat:
+                    0,
+
+                dibuat:
+                    new Date().toISOString(),
+
+                terakhirDipelajari:
+                    new Date().toISOString()
+
+            });
+
+        }
+
+    }
+
+
+    daftar =
+        daftar.filter(
+            function (item) {
+
+                return (
+                    item &&
+                    item.id !== undefined &&
+                    item.materi !== undefined &&
+                    String(item.materi).trim() !== ""
+                );
+
+            }
+        );
+
+
+    simpanMateriSaya(daftar);
+
+    return daftar;
+}
+
+
+/* ========================================================= */
+/* TAMPILKAN DAFTAR */
+/* ========================================================= */
+
+function tampilkanMateri() {
+
+    const daftar =
+        ambilMateriSaya();
+
+
+    const searchInput =
+        document.getElementById("searchMateri");
+
+
+    const search =
+        String(
+            searchInput.value || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    const container =
+        document.getElementById("daftarMateri");
+
+
+    container.innerHTML = "";
+
+
+    const hasil =
+        daftar.filter(
+            function (item) {
+
+                const judul =
+                    String(
+                        item.judul || ""
+                    ).toLowerCase();
+
+
+                const isi =
+                    String(
+                        item.materi || ""
+                    ).toLowerCase();
+
+
+                return (
+                    !search ||
+                    judul.includes(search) ||
+                    isi.includes(search)
+                );
+
+            }
+        );
+
+
+    if (hasil.length === 0) {
+
+        container.innerHTML = `
+            <div class="empty-text">
+                Belum ada materi yang cocok.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    const aktifId =
+        localStorage.getItem("materiAktifId");
+
+
+    hasil.forEach(
+        function (item) {
+
+            const wrapper =
+                document.createElement("div");
+
+            wrapper.className =
+                "materi-item";
+
+
+            const title =
+                document.createElement("div");
+
+            title.className =
+                "materi-item-title";
+
+            title.innerText =
+                item.judul ||
+                "Tanpa Judul";
+
+
+            const info =
+                document.createElement("div");
+
+            info.className =
+                "materi-item-info";
+
+
+            const sudah =
+                item.sudahDipelajari
+                    ? "Sudah dipelajari"
+                    : "Belum dipelajari";
+
+
+            info.innerText =
+                sudah;
+
+
+            if (
+                idSama(
+                    aktifId,
+                    item.id
+                )
+            ) {
+
+                info.innerText +=
+                    " • Sedang aktif";
+
+            }
+
+
+            const actions =
+                document.createElement("div");
+
+            actions.className =
+                "materi-item-actions";
+
+
+            const buka =
+                document.createElement("button");
+
+            buka.type =
+                "button";
+
+            buka.innerText =
+                "📖 Buka Materi";
+
+
+            buka.onclick =
+                function () {
+
+                    bukaMateri(
+                        item.id
+                    );
+
+                };
+
+
+            const latihan =
+                document.createElement("button");
+
+            latihan.type =
+                "button";
+
+            latihan.innerText =
+                "🎮 Latihan";
+
+
+            latihan.onclick =
+                function () {
+
+                    mulaiLatihan(
+                        item.id
+                    );
+
+                };
+
+
+            const hapus =
+                document.createElement("button");
+
+            hapus.type =
+                "button";
+
+            hapus.innerText =
+                "Hapus";
+
+            hapus.className =
+                "danger-button";
+
+
+            hapus.onclick =
+                function () {
+
+                    hapusMateri(
+                        item.id
+                    );
+
+                };
+
+
+            actions.appendChild(buka);
+            actions.appendChild(latihan);
+            actions.appendChild(hapus);
+
+
+            wrapper.appendChild(title);
+            wrapper.appendChild(info);
+            wrapper.appendChild(actions);
+
+
+            container.appendChild(wrapper);
+
+        }
+    );
+}
+
+
+/* ========================================================= */
+/* BUKA MATERI */
+/* ========================================================= */
+
+async function bukaMateri(
+    id,
+    langsungLatihan = false
+) {
+
+    const daftar =
+        ambilMateriSaya();
+
+
+    const index =
+        daftar.findIndex(
+            function (item) {
+
+                return idSama(
+                    item.id,
+                    id
+                );
+
+            }
+        );
+
+
+    if (index === -1) {
+
+        alert(
+            "Materi tidak ditemukan."
+        );
+
+        return;
+    }
+
+
+    const item =
+        daftar[index];
+
+
+    if (
+        !item.materi ||
+        !String(item.materi).trim()
+    ) {
+
+        alert(
+            "Isi materi kosong."
+        );
+
+        return;
+    }
+
+
+    /* Materi aktif */
+
+    localStorage.setItem(
+        "materiAktifId",
+        String(item.id)
+    );
+
+
+    localStorage.setItem(
+        "materi",
+        item.materi
+    );
+
+
+    localStorage.setItem(
+        "judulMateri",
+        item.judul || "Materi"
+    );
+
+
+    document.getElementById(
+        "areaBelajar"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "judulAktif"
+    ).innerText =
+        item.judul || "Materi";
+
+
+    document.getElementById(
+        "hasilTanya"
+    ).innerText =
+        "";
+
+
+    /*
+        Kalau paket sudah ada,
+        gunakan paket tersebut.
+    */
+
+    if (item.paketBelajar) {
+
+        localStorage.setItem(
+            "paketBelajar",
+            JSON.stringify(
+                item.paketBelajar
+            )
+        );
+
+        tampilkanPaket(
+            item.paketBelajar
+        );
+
+    }
+
+    /*
+        Kalau paket belum ada,
+        hapus paket lama supaya
+        tidak tertukar dengan materi baru.
+    */
+
+    else {
+
+        localStorage.removeItem(
+            "paketBelajar"
+        );
+
+
+        document.getElementById(
+            "hasilPenjelasan"
+        ).innerText =
+            "AI sedang memahami materi...";
+
+
+        document.getElementById(
+            "hasilKonsep"
+        ).innerHTML =
+            "";
+
+
+        document.getElementById(
+            "hasilContoh"
+        ).innerHTML =
+            "";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/paket-belajar",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+                                materi:
+                                    item.materi
+                            })
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                let pesan =
+                    "Server gagal membuat paket.";
+
+                try {
+
+                    const errorData =
+                        await response.json();
+
+                    if (errorData.detail) {
+                        pesan =
+                            errorData.detail;
+                    }
+
+                } catch (error) {
+                    /* Abaikan */
+                }
+
+                throw new Error(pesan);
+            }
+
+
+            const paket =
+                await response.json();
+
+
+            item.paketBelajar =
+                paket;
+
+
+            item.sudahDipelajari =
+                true;
+
+
+            item.terakhirDipelajari =
+                new Date().toISOString();
+
+
+            /*
+                EXP belajar hanya diberikan
+                satu kali untuk materi tersebut.
+            */
+
+            if (
+                !item.expDidapat ||
+                item.expDidapat < 10
+            ) {
+
+                tambahEXP(10);
+
+                item.expDidapat =
+                    10;
+
+            }
+
+
+            daftar[index] =
+                item;
+
+
+            simpanMateriSaya(
+                daftar
+            );
+
+
+            localStorage.setItem(
+                "paketBelajar",
+                JSON.stringify(paket)
+            );
+
+
+            tampilkanPaket(
+                paket
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Gagal membuat paket:",
+                error
+            );
+
+
+            document.getElementById(
+                "hasilPenjelasan"
+            ).innerText =
+                "Gagal membuat paket belajar.\n\n" +
+                error.message;
+
+
+            return;
+        }
+
+    }
+
+
+    tampilkanMateri();
+
+    updateEXP();
+
+
+    /*
+        Kalau berasal dari tombol latihan,
+        langsung masuk Game setelah paket
+        berhasil tersedia.
+    */
+
+    if (langsungLatihan) {
+
+        window.location.href =
+            "/game";
+    }
+}
+
+
+/* ========================================================= */
+/* TAMPILKAN PAKET */
+/* ========================================================= */
+
+function tampilkanPaket(paket) {
+
+    if (!paket) {
+        return;
+    }
+
+
+    document.getElementById(
+        "hasilPenjelasan"
+    ).innerText =
+        paket.penjelasan ||
+        "Belum ada penjelasan.";
+
+
+    const konsep =
+        document.getElementById(
+            "hasilKonsep"
+        );
+
+
+    konsep.innerHTML =
+        "";
+
+
+    if (
+        Array.isArray(
+            paket.konsep_penting
+        )
+    ) {
+
+        paket.konsep_penting.forEach(
+            function (item) {
+
+                const li =
+                    document.createElement("li");
+
+                li.innerText =
+                    item;
+
+                konsep.appendChild(li);
+
+            }
+        );
+
+    }
+
+
+    const contoh =
+        document.getElementById(
+            "hasilContoh"
+        );
+
+
+    contoh.innerHTML =
+        "";
+
+
+    if (
+        Array.isArray(
+            paket.contoh
+        )
+    ) {
+
+        paket.contoh.forEach(
+            function (item) {
+
+                const li =
+                    document.createElement("li");
+
+                li.innerText =
+                    item;
+
+                contoh.appendChild(li);
+
+            }
+        );
+
+    }
+}
+
+
+/* ========================================================= */
+/* TAMBAH EXP */
+/* ========================================================= */
+
+function tambahEXP(jumlah) {
+
+    const exp =
+        Number(
+            localStorage.getItem("exp") || 0
+        );
+
+
+    localStorage.setItem(
+        "exp",
+        String(
+            exp + Number(jumlah)
+        )
+    );
+
+
+    updateEXP();
+}
+
+
+/* ========================================================= */
+/* BACA FILE */
+/* ========================================================= */
+
+async function bacaFileMateri() {
+
+    const input =
+        document.getElementById(
+            "fileMateri"
+        );
+
+
+    const status =
+        document.getElementById(
+            "statusFile"
+        );
+
+
+    if (
+        !input ||
+        !input.files ||
+        input.files.length === 0
+    ) {
+
+        status.innerText =
+            "Pilih file terlebih dahulu.";
+
+        return;
+    }
+
+
+    const file =
+        input.files[0];
+
+
+    const batasUkuran =
+        25 * 1024 * 1024;
+
+
+    if (
+        file.size > batasUkuran
+    ) {
+
+        status.innerText =
+            "Ukuran file terlalu besar. Maksimal 25 MB.";
+
+        return;
+    }
+
+
+    status.innerText =
+        "Sedang membaca file...";
+
+
+    const formData =
+        new FormData();
+
+
+    formData.append(
+        "file",
+        file
+    );
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/baca-file",
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+
+        let data = {};
+
+
+        try {
+
+            data =
+                await response.json();
+
+        } catch (error) {
+
+            data = {};
+
+        }
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.detail ||
+                "File gagal dibaca."
+            );
+        }
+
+
+        const materiInput =
+            document.getElementById(
+                "materiBaru"
+            );
+
+
+        const judulInput =
+            document.getElementById(
+                "judulMateriBaru"
+            );
+
+
+        if (!materiInput) {
+
+            throw new Error(
+                "Kotak materi tidak ditemukan."
+            );
+        }
+
+
+        materiInput.value =
+            data.materi || "";
+
+
+        if (
+            judulInput &&
+            !judulInput.value.trim()
+        ) {
+
+            const namaFile =
+                String(
+                    data.nama_file ||
+                    file.name
+                ).replace(
+                    /\.[^/.]+$/,
+                    ""
+                );
+
+
+            judulInput.value =
+                namaFile;
+
+        }
+
+
+        status.innerText =
+            "File berhasil dibaca. Sekarang klik Simpan Materi.";
+
+
+        materiInput.focus();
+
+
+    } catch (error) {
+
+        console.error(
+            "Gagal membaca file:",
+            error
+        );
+
+
+        status.innerText =
+            "Gagal membaca file: " +
+            error.message;
+    }
+}
+
+
+/* ========================================================= */
+/* SIMPAN MATERI BARU */
+/* ========================================================= */
+
+function simpanMateriBaru() {
+
+    const judulInput =
+        document.getElementById(
+            "judulMateriBaru"
+        );
+
+
+    const materiInput =
+        document.getElementById(
+            "materiBaru"
+        );
+
+
+    const status =
+        document.getElementById(
+            "statusTambah"
+        );
+
+
+    const judul =
+        judulInput.value.trim();
+
+
+    const materi =
+        materiInput.value.trim();
+
+
+    if (!materi) {
+
+        status.innerText =
+            "Isi materi terlebih dahulu.";
+
+        return;
+    }
+
+
+    const daftar =
+        ambilMateriSaya();
+
+
+    const judulFinal =
+        judul ||
+        "Materi Baru";
+
+
+    const sudahAda =
+        daftar.some(
+            function (item) {
+
+                return (
+                    String(
+                        item.materi || ""
+                    ).trim() ===
+                    materi
+                );
+
+            }
+        );
+
+
+    if (sudahAda) {
+
+        status.innerText =
+            "Materi dengan isi yang sama sudah ada.";
+
+        return;
+    }
+
+
+    const item = {
+
+        id:
+            buatIdBaru(),
+
+        judul:
+            judulFinal,
+
+        materi:
+            materi,
+
+        paketBelajar:
+            null,
+
+        sudahDipelajari:
+            false,
+
+        skorUjian:
+            null,
+
+        expDidapat:
+            0,
+
+        dibuat:
+            new Date().toISOString(),
+
+        terakhirDipelajari:
+            null
+
+    };
+
+
+    daftar.unshift(item);
+
+
+    simpanMateriSaya(
+        daftar
+    );
+
+
+    localStorage.setItem(
+        "materiAktifId",
+        String(item.id)
+    );
+
+
+    localStorage.setItem(
+        "materi",
+        item.materi
+    );
+
+
+    localStorage.setItem(
+        "judulMateri",
+        item.judul
+    );
+
+
+    localStorage.removeItem(
+        "paketBelajar"
+    );
+
+
+    judulInput.value =
+        "";
+
+
+    materiInput.value =
+        "";
+
+
+    status.innerText =
+        "Materi berhasil disimpan. AI sedang menyiapkan penjelasan...";
+
+
+    tampilkanMateri();
+
+
+    bukaMateri(
+        item.id
+    );
+}
+
+
+/* ========================================================= */
+/* TANYA AI */
+/* ========================================================= */
+
+async function tanyaAI() {
+
+    const pertanyaan =
+        document.getElementById(
+            "pertanyaan"
+        ).value.trim();
+
+
+    const hasil =
+        document.getElementById(
+            "hasilTanya"
+        );
+
+
+    const aktifId =
+        localStorage.getItem(
+            "materiAktifId"
+        );
+
+
+    const item =
+        cariMateriDenganId(
+            aktifId
+        );
+
+
+    if (!item) {
+
+        alert(
+            "Pilih materi terlebih dahulu."
+        );
+
+        return;
+    }
+
+
+    if (!pertanyaan) {
+
+        hasil.innerText =
+            "Tulis pertanyaan terlebih dahulu.";
+
+        return;
+    }
+
+
+    hasil.innerText =
+        "AI sedang menjawab...";
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/tanya",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+                            materi:
+                                item.materi,
+
+                            pertanyaan:
+                                pertanyaan
+                        })
+                }
+            );
+
+
+        if (!response.ok) {
+
+            let pesan =
+                "Server gagal menjawab.";
+
+            try {
+
+                const errorData =
+                    await response.json();
+
+                if (errorData.detail) {
+                    pesan =
+                        errorData.detail;
+                }
+
+            } catch (error) {
+                /* Abaikan */
+            }
+
+            throw new Error(pesan);
+        }
+
+
+        const data =
+            await response.json();
+
+
+        hasil.innerText =
+            data.jawaban ||
+            "AI tidak memberikan jawaban.";
+
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+
+        hasil.innerText =
+            "Gagal menghubungi AI: " +
+            error.message;
+    }
+}
+
+
+/* ========================================================= */
+/* LATIHAN */
+/* ========================================================= */
+
+async function mulaiLatihan(id) {
+
+    await bukaMateri(
+        id,
+        true
+    );
+}
+
+
+async function mulaiLatihanAktif() {
+
+    const id =
+        localStorage.getItem(
+            "materiAktifId"
+        );
+
+
+    if (!id) {
+
+        alert(
+            "Pilih materi terlebih dahulu."
+        );
+
+        return;
+    }
+
+
+    const item =
+        cariMateriDenganId(id);
+
+
+    if (!item) {
+
+        alert(
+            "Materi aktif tidak ditemukan."
+        );
+
+        return;
+    }
+
+
+    /*
+        Gunakan bukaMateri() supaya
+        paket belajar dipastikan tersedia.
+    */
+
+    await bukaMateri(
+        item.id,
+        true
+    );
+}
+
+
+/* ========================================================= */
+/* UJIAN */
+/* ========================================================= */
+
+function mulaiUjianAktif() {
+
+    const id =
+        localStorage.getItem(
+            "materiAktifId"
+        );
+
+
+    if (!id) {
+
+        alert(
+            "Pilih materi terlebih dahulu."
+        );
+
+        return;
+    }
+
+
+    const item =
+        cariMateriDenganId(id);
+
+
+    if (!item) {
+
+        alert(
+            "Materi aktif tidak ditemukan."
+        );
+
+        return;
+    }
+
+
+    if (!item.paketBelajar) {
+
+        alert(
+            "Materi ini belum memiliki paket belajar. Buka materi terlebih dahulu."
+        );
+
+        return;
+    }
+
+
+    localStorage.setItem(
+        "materiAktifId",
+        String(item.id)
+    );
+
+
+    localStorage.setItem(
+        "materi",
+        item.materi
+    );
+
+
+    localStorage.setItem(
+        "judulMateri",
+        item.judul || "Materi"
+    );
+
+
+    localStorage.setItem(
+        "paketBelajar",
+        JSON.stringify(
+            item.paketBelajar
+        )
+    );
+
+
+    window.location.href =
+        "/ujian";
+}
+
+
+/* ========================================================= */
+/* HAPUS MATERI */
+/* ========================================================= */
+
+function hapusMateri(id) {
+
+    const daftar =
+        ambilMateriSaya();
+
+
+    const item =
+        daftar.find(
+            function (data) {
+
+                return idSama(
+                    data.id,
+                    id
+                );
+
+            }
+        );
+
+
+    if (!item) {
+        return;
+    }
+
+
+    const yakin =
+        confirm(
+            'Hapus materi "' +
+            (
+                item.judul ||
+                "Tanpa Judul"
+            ) +
+            '"?'
+        );
+
+
+    if (!yakin) {
+        return;
+    }
+
+
+    const baru =
+        daftar.filter(
+            function (data) {
+
+                return !idSama(
+                    data.id,
+                    id
+                );
+
+            }
+        );
+
+
+    simpanMateriSaya(
+        baru
+    );
+
+
+    const aktifId =
+        localStorage.getItem(
+            "materiAktifId"
+        );
+
+
+    if (
+        idSama(
+            aktifId,
+            id
+        )
+    ) {
+
+        localStorage.removeItem(
+            "materiAktifId"
+        );
+
+        localStorage.removeItem(
+            "materi"
+        );
+
+        localStorage.removeItem(
+            "judulMateri"
+        );
+
+        localStorage.removeItem(
+            "paketBelajar"
+        );
+
+
+        document.getElementById(
+            "areaBelajar"
+        ).style.display =
+            "none";
+    }
+
+
+    tampilkanMateri();
+}
+
+
+/* ========================================================= */
+/* PEMULIHAN MATERI AKTIF */
+/* ========================================================= */
+
+function pulihkanMateriAktif() {
+
+    const id =
+        localStorage.getItem(
+            "materiAktifId"
+        );
+
+
+    if (!id) {
+        return;
+    }
+
+
+    const item =
+        cariMateriDenganId(id);
+
+
+    if (!item) {
+
+        localStorage.removeItem(
+            "materiAktifId"
+        );
+
+        return;
+    }
+
+
+    localStorage.setItem(
+        "materi",
+        item.materi
+    );
+
+
+    localStorage.setItem(
+        "judulMateri",
+        item.judul || "Materi"
+    );
+
+
+    if (item.paketBelajar) {
+
+        localStorage.setItem(
+            "paketBelajar",
+            JSON.stringify(
+                item.paketBelajar
+            )
+        );
+
+
+        document.getElementById(
+            "areaBelajar"
+        ).style.display =
+            "block";
+
+
+        document.getElementById(
+            "judulAktif"
+        ).innerText =
+            item.judul || "Materi";
+
+
+        tampilkanPaket(
+            item.paketBelajar
+        );
+    }
+}
+
+
+/* ========================================================= */
+/* START */
+/* ========================================================= */
+
+function mulaiHalaman() {
+
+    migrasiDataLama();
+
+    tampilkanMateri();
+
+    pulihkanMateriAktif();
+
+    updateEXP();
+}
+
+
+mulaiHalaman();
+
+</script>
+
+</body>
+
+</html>
